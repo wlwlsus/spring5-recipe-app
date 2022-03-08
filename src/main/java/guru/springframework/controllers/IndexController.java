@@ -7,6 +7,7 @@ import guru.springframework.repositories.UnitOfMeasureRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,8 +16,8 @@ import java.util.Optional;
 @Controller
 public class IndexController {
 
-	private CategoryRepository categoryRepository;
-	private UnitOfMeasureRepository unitOfMeasureRepository;
+	private final CategoryRepository categoryRepository;
+	private final UnitOfMeasureRepository unitOfMeasureRepository;
 
 	public IndexController(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
 		this.categoryRepository = categoryRepository;
@@ -26,10 +27,12 @@ public class IndexController {
 	@RequestMapping({"", "/", "/index"})
 	public String getIndexPage() {
 
-		Optional<Category> categoryOptional = categoryRepository.findByDescription("Fast Food");
-		Optional<UnitOfMeasure> unitOfMeasureOptional = unitOfMeasureRepository.findByDescription("Cup");
-		categoryOptional.ifPresent(s -> System.out.println("UOM Id is: " + s.getId()));
-		System.out.println("UOM Id is: " + unitOfMeasureOptional.get().getId());
+		Optional<List<Category>> categoryOptional = categoryRepository.findByDescriptionQuery("Fast Food");
+//		Optional<UnitOfMeasure> unitOfMeasureOptional = unitOfMeasureRepository.findByDescription("Cup");
+		categoryOptional.ifPresent(
+						categories -> categories.forEach(category -> System.out.println("Cat id " + category.getId() + " is : " + category.getDescription()))
+		);
+//		System.out.println("UOM Id is: " + unitOfMeasureOptional.get().getId());
 
 		return "index";
 	}
