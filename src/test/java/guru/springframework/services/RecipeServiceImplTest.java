@@ -45,7 +45,6 @@ public class RecipeServiceImplTest {
 
         assertEquals(recipes.size(), 1);
         verify(recipeRepository, times(1)).findAll();
-        Simple Error Test
     }
 
 }
